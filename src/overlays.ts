@@ -3,7 +3,7 @@ import { FillLayer } from "react-map-gl";
 
 
 // import the raw JSON file
-import rl_data from './data/fullDownload.geojson'
+import rl_data from '../data/fullDownload.geojson'
 
 
 // type predicate
