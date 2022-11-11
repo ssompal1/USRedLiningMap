@@ -10,11 +10,13 @@ Victoria Vo (vvo4)
 https://github.com/cs0320-f2022/integration-ssompal1-vvo4.git
 
 ## CONTRIBUTIONS/SOURCES
-aremels-lshack- method of bound-box testing and testing on city/holc_grade
 
 ## DESIGN CHOICES 
-We spliited this project into a frontend and backend directory. The backend contains the server which runs the server, 
-and a RedLineHandler which contains the functionality for deserializing and serializing data and handles the request for the redlining data. The frontend contains 
+This project is split into a frontend and backend directory. The pertinent files in the backend are the RedLineHandler and Server
+classes. The server sets up a new endpoint "redline" so that the user may retrieve a collection of features displayed in JSON format
+from the large geoJSON provided by <INSERT SOURCE>. In the RedLineHandler, 
+
+The frontend contains mostly contains MapDemo and overlays. The MapDemo.tsx file is in charge of running the main Map and the overlays.ts file connects our bakcend directory with the map. 
 
 ## BUGS 
 

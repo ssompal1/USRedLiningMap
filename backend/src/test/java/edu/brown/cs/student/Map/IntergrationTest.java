@@ -78,15 +78,15 @@ public class IntergrationTest {
 
   @Test
   public void testRedLineNoParameters() throws IOException {
-    // HttpURLConnection clientConnection = tryRequest("redline");
-    // assertEquals(200, clientConnection.getResponseCode());
+    HttpURLConnection clientConnection = tryRequest("redline");
+    assertEquals(200, clientConnection.getResponseCode());
 
-    // Moshi moshi = new Moshi.Builder().build();
-    // Map<String, Object> responses =
-    //     moshi.adapter(Map.class).fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
-    // assertEquals(Map.of("result", "error_bad_request"), responses);
+    Moshi moshi = new Moshi.Builder().build();
+    Map<String, Object> responses =
+        moshi.adapter(Map.class).fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
+    assertEquals(Map.of("result", "error_bad_request"), responses);
 
-    // clientConnection.disconnect();
+    clientConnection.disconnect();
   }
 
   @Test

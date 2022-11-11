@@ -18,6 +18,7 @@ public class RedLineHandler implements Route {
   private String max_lat;
   private String max_lon;
 
+  //iniitalize instance variables corresponding to query parameters to null
   public RedLineHandler() {
     this.min_lat = null;
     this.min_lon = null;
@@ -27,11 +28,9 @@ public class RedLineHandler implements Route {
 
   /**
    * This main method of the class dictates the processing and response of a request made to the API
-   * server. If the user does not pass a latitude and longitude in the request,
-   * weatherFailureResponse is called with a bad_request description. The method attempts to make a
-   * request to the NWS API and retrieve a temperature given the user latitude and longitude. If
-   * invalid coordinates are passed, weatherFailureResponse is called
-   *
+   * server. If the user does not pass a minimum and maximum latitude and a minimum and maximum longitude in the request,
+   * redLineFailureResponse is called with a bad_request description. The method attempts to read from the geoJSON file
+   * and retrieve a FeaturesCollection given the user min/max latitude and longitude. 
    * @param request
    * @param response
    * @return
@@ -45,6 +44,7 @@ public class RedLineHandler implements Route {
     this.max_lat = request.queryParams("max_lat");
     this.max_lon = request.queryParams("max_lon");
 
+    //checks if user passed a min/max latitude & longitude
     if (this.min_lat == null
         || this.min_lon == null
         || this.max_lat == null
@@ -76,6 +76,7 @@ public class RedLineHandler implements Route {
       e.printStackTrace();
     }
 
+    //filters through different regions and add features that meet query parameters of bounded box
     List<Feature> filteredFeatures = new ArrayList<>();
     features:
     for (Feature feature : data.features) {
@@ -92,9 +93,14 @@ public class RedLineHandler implements Route {
       filteredFeatures.add(feature);
     }
     FeatureCollection collection = new FeatureCollection("FeatureCollection", filteredFeatures);
+    //return collection of Features as a success response 
     return redLineSuccessResponse(collection);
   }
 
+  /**
+  * A collection of features passed in as a parameter. A map is created returning a successful result, the collection, 
+  * and the values of the passed in query parameters
+  */
   public Object redLineSuccessResponse(FeatureCollection filteredData) {
     Map<String, Object> responses = new HashMap<>();
     responses.put("result", "success");
@@ -104,6 +110,7 @@ public class RedLineHandler implements Route {
     responses.put("max_lat", this.max_lat);
     responses.put("max_lon", this.max_lon);
 
+    //serialize responses into JSON format
     Moshi moshi = new Moshi.Builder().build();
     return moshi.adapter(Map.class).toJson(responses);
   }

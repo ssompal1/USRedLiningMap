@@ -40,7 +40,7 @@ public class TestRedLineIntegration {
   @AfterEach
   public void teardown() {
     // Stop Spark listening on the endpoint
-    Spark.unmap("geoJSON");
+    Spark.unmap("redline");
     Spark.awaitStop(); 
   }
 
@@ -58,6 +58,9 @@ public class TestRedLineIntegration {
 
 @Test
   public void testValidParams() throws IOException {
+  Spark.get("redline", new RedLineHandler());
+  Spark.init();
+  Spark.awaitInitialization();
   String apiCall = "redline?min_lon=-75.4&max_lon=-75&min_lat=39.95&max_lat=40";
     HttpURLConnection clientConnection = tryRequest(apiCall);
     assertEquals(200, clientConnection.getResponseCode());
@@ -66,14 +69,15 @@ public class TestRedLineIntegration {
     Map<String, Object> response =
         moshi.adapter(Map.class).fromJson(new Buffer().readFrom(clientConnection.getInputStream()));
 
-    assertEquals("FeatureCollection", response.get("type"));
-    List features = (List) response.get("features");
+    //assertEquals("FeatureCollection", response.get("type"));
+    List features = (List) response.get("data");
+    System.out.println(features);
     Map firstFeature = (Map) features.get(0);
     Map firstFeatureProps = (Map) firstFeature.get("properties");
     String city = (String) firstFeatureProps.get("city");
     String holc_grade = (String) firstFeatureProps.get("holc_grade");
-    assertEquals("Phoenix", city);
-    assertEquals("A", holc_grade);
+    assertEquals("Camden", city);
+    assertEquals("B", holc_grade);
   }
 
   @Test
