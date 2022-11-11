@@ -53,7 +53,7 @@ public class CSVData {
     this.data = csvData;
   }
 
-  public void clearData(){
+  public void clearData() {
     this.data.clear();
   }
 
