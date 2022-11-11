@@ -45,15 +45,11 @@ public class LoadHandler implements Route {
 
     // Determines if the user provided a filepath
     if (this.filepath == null) {
-      this.data.clearData();
-      this.data.setIsLoaded(false);
       return loadResponse("error_bad_request");
     }
 
     // Determines if the desired file is in the data folder
     if (!filepath.startsWith("data/")) {
-      this.data.clearData();
-      this.data.setIsLoaded(false);
       return loadResponse("error_datasource");
     }
 
@@ -64,16 +60,10 @@ public class LoadHandler implements Route {
       CSVParser<List<String>> parser = new CSVParser<>(fr, new ListStringFactory());
       List<List<String>> fileData = parser.create();
       this.data.setData(fileData);
-      this.data.setRow(parser.getRowCount());
-      this.data.setCol(parser.getColumnCount());
       this.data.setIsLoaded(true);
     } catch (FactoryFailureException e) {
-      this.data.clearData();
-      this.data.setIsLoaded(false);
       return loadResponse("error_datasource");
     } catch (IOException e) {
-      this.data.clearData();
-      this.data.setIsLoaded(false);
       return loadResponse("error_datasource");
     }
 

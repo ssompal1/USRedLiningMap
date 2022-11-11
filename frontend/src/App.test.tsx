@@ -4,7 +4,6 @@ import App from './App';
 
 test('renders instructions', () => {
   render(<App />);
-  // The "i" modifier means a case-insensitive match
-  const instructionElement = screen.getByText(/I'm thinking of a function/i);
+  const instructionElement = screen.getByText(/react/i);
   expect(instructionElement).toBeInTheDocument();
 });

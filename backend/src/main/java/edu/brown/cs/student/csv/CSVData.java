@@ -10,8 +10,6 @@ import java.util.List;
 public class CSVData {
   private List<List<String>> data;
   private Boolean isLoaded;
-  private Integer row;
-  private Integer col;
 
   /**
    * Instance variables for the data and boolean indicated loaded status are initialized
@@ -53,10 +51,6 @@ public class CSVData {
     this.data = csvData;
   }
 
-  public void clearData() {
-    this.data.clear();
-  }
-
   /**
    * getter method for loaded status
    *
@@ -73,21 +67,5 @@ public class CSVData {
    */
   public void setIsLoaded(Boolean value) {
     this.isLoaded = value;
-  }
-
-  public void setRow(int row) {
-    this.row = row;
-  }
-
-  public void setCol(int col) {
-    this.col = col;
-  }
-
-  public Integer getRow() {
-    return this.row;
-  }
-
-  public Integer getCol() {
-    return this.col;
   }
 }

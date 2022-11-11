@@ -10,6 +10,7 @@ Victoria Vo (vvo4)
 https://github.com/cs0320-f2022/integration-ssompal1-vvo4.git
 
 ## CONTRIBUTIONS/SOURCES
+aremels-lshack- method of bound-box testing and testing on city/holc_grade
 
 ## DESIGN CHOICES 
 We spliited this project into a frontend and backend directory. The backend contains the server which runs the server, 

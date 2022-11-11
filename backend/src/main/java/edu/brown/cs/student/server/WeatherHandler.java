@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -87,52 +88,31 @@ public class WeatherHandler implements Route {
    * @return
    * @throws Exception
    */
-  public static Integer getTemperature(String latitude, String longitude)
+  public Integer getTemperature(String latitude, String longitude)
       throws IOException, InterruptedException, URISyntaxException, NullPointerException {
     String websiteLink = "https://api.weather.gov/points/" + latitude + "," + longitude;
-    String weatherResponse = sendRequest(websiteLink);
-    String forecastURL = retrieveForecastURL(weatherResponse);
-    String forecastResponse = sendRequest(forecastURL);
-    Integer currentTemperature = retrieveTemperature(forecastResponse);
-    return currentTemperature;
-  }
+    HttpRequest weatherRequest = HttpRequest.newBuilder().uri(new URI(websiteLink)).GET().build();
+    HttpResponse<String> weatherResponse =
+        HttpClient.newBuilder().build().send(weatherRequest, BodyHandlers.ofString());
 
-  /**
-   * Sends a request to provided link, returning the results of the request.
-   *
-   * @param link - website of the provided API
-   * @return - website response in the form of a String
-   * @throws IOException - issue with API
-   * @throws InterruptedException - issue with API
-   */
-  public static String sendRequest(String link)
-      throws IOException, InterruptedException, URISyntaxException {
-    HttpRequest request = HttpRequest.newBuilder().uri(new URI(link)).GET().build();
-    return HttpClient.newBuilder().build().send(request, BodyHandlers.ofString()).body();
-  }
-
-  /**
-   * Retrieves the forecast URL from the Weather Service API
-   *
-   * @param response - API response
-   * @return - forecast URL
-   */
-  public static String retrieveForecastURL(String response) throws IOException {
     Moshi moshi = new Moshi.Builder().build();
-    String forecastURL = moshi.adapter(Weather.class).fromJson(response).properties.forecast;
-    return forecastURL;
-  }
+    String forecastURL =
+        moshi.adapter(Weather.class).fromJson(weatherResponse.body()).properties.forecast;
 
-  /**
-   * Retrieves the temperature from the Weather Service API
-   *
-   * @param response - API response
-   * @return - current temperature
-   */
-  public static Integer retrieveTemperature(String response) throws IOException {
+    HttpRequest forecastRequest = HttpRequest.newBuilder().uri(new URI(forecastURL)).GET().build();
+
+    HttpResponse<String> forecastResponse =
+        HttpClient.newBuilder().build().send(forecastRequest, BodyHandlers.ofString());
+
     Moshi moshi_two = new Moshi.Builder().build();
     Integer currentTemperature =
-        moshi_two.adapter(Forecast.class).fromJson(response).properties.periods.get(0).temperature;
+        moshi_two
+            .adapter(Forecast.class)
+            .fromJson(forecastResponse.body())
+            .properties
+            .periods
+            .get(0)
+            .temperature;
     return currentTemperature;
   }
 

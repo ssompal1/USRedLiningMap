@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.squareup.moshi.Moshi;
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.Level;
@@ -35,44 +33,7 @@ public class TestWeatherUnits {
     assertEquals(weatherHandler.truncate(zero), "0");
   }
 
-  /** Tests that the forecast URL is properly found on the API */
-  @Test
-  public void testWeatherResponse() throws IOException, InterruptedException, URISyntaxException {
-    String latitude = "33.4942";
-    String longitude = "-111.926";
-    String websiteLink = "https://api.weather.gov/points/" + latitude + "," + longitude;
-    String weatherResponse = WeatherHandler.sendRequest(websiteLink);
-    String forecastURL = WeatherHandler.retrieveForecastURL(weatherResponse);
-    assertEquals(forecastURL, "https://api.weather.gov/gridpoints/PSR/164,58/forecast");
-  }
-
-  /** Tests that the temperature is properly found on the forecast URL */
-  @Test
-  public void testForecastResponse() throws IOException, InterruptedException, URISyntaxException {
-    String websiteLink = "https://api.weather.gov/gridpoints/PSR/164,58/forecast";
-    String forecastResponse = WeatherHandler.sendRequest(websiteLink);
-    Integer temperature = WeatherHandler.retrieveTemperature(forecastResponse);
-    assertTrue(temperature > -150 && temperature < 150);
-  }
-
-  /** Tests that the forecast URL is properly found on a mock WeatherResponse */
-  @Test
-  public void testMockWeatherResponse() throws IOException, InterruptedException {
-    String weatherResponse =
-        "{ \"properties\": { \"forecast\": \"https://api.weather.gov/gridpoints/PSR/164,58/forecast\" } }";
-    String forecastURL = WeatherHandler.retrieveForecastURL(weatherResponse);
-    assertEquals(forecastURL, "https://api.weather.gov/gridpoints/PSR/164,58/forecast");
-  }
-
-  /** Tests that the temperature is properly found on a mock ForecastResponse */
-  @Test
-  public void testMockForecastResponse() throws IOException, InterruptedException {
-    String forecastResponse = "{ \"properties\": { \"periods\": [ {\"temperature\": 90} ] } }";
-    Integer temperature = WeatherHandler.retrieveTemperature(forecastResponse);
-    assertEquals(temperature, 90);
-  }
-
-  /** Tests the getTemperature() function fully within the WeatherHandler Class */
+  /** Tests the getTemperature() function within the WeatherHandler Class */
   @Test
   public void testGetTemperature() throws Exception {
     Spark.port(0);

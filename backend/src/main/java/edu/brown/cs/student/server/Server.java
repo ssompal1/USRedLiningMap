@@ -13,7 +13,7 @@ import spark.Spark;
  */
 public class Server {
   public static void main(String[] args) {
-    Spark.port(3232);
+    Spark.port(3230);
 
     after(
         (request, response) -> {
