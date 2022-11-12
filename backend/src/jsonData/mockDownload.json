@@ -1,0 +1,5 @@
+{"type": "FeatureCollection", "features": [
+  {"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[40.7,40.7],[-74.0,-74.0]]]]},"properties":{"state":"NY","city":"New York City"}},
+  {"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[35.77,35.80],[-78.6,-78.5]]]]},"properties":{"state":"NC","city":"Raleigh"}},
+  {"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[30,30],[30.2,30.2]]]]},"properties":{"state":"CA","city":"San Francisco"}}
+  ]}
