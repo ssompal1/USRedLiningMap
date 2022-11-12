@@ -3,7 +3,7 @@ import { FillLayer } from "react-map-gl";
 
 
 // import the raw JSON file
-import rl_data from "./mockData/fullDownload.json"
+import rl_data from "../../backend/src/mockData/fullDownload.json"
 
 
 // type predicate

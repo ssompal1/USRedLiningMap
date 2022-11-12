@@ -1,16 +1,16 @@
 import React from 'react';
 import './App.css';
-import Demo from './MapDemo';
+import RedLineMap from './Map';
+import Demo from './Map';
 
 /**
- * This is the App class. It renders Demo and therefore produces a map
- * of Providence with redlining data overlayed.
+ * This is the App class. It renders Demo and therefore produces an interactive map with redlining data overlayed.
  * @returns 
  */
 function App() {
   return (
     <div className="App">
-      <Demo/>      
+      <RedLineMap/>      
     </div>
   );
 }

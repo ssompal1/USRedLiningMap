@@ -5,8 +5,12 @@ import {myKey} from './private/key'
 import { geoLayer, overlayData } from './overlays';
 
 
-
-export default function Demo() {
+/**
+ * This is the class representing the Map in the web page. It utilizes a state hook in order to automatically update the map view
+ * based on user drag and zoom. 
+ * @returns 
+ */
+export default function RedLineMap() {
   //create state variable for adjusting display of map
   const [viewState, setViewState] = React.useState({
     longitude: -71.4129,
@@ -23,8 +27,11 @@ export default function Demo() {
     setOverlay(overlayData)
   }, []) 
 
+  //Render map with data overlayed. Move and click call function of state hook so view of map is automatically updated
   return (
-    <div className="map-demo">
+    <div className="map-demo"
+    aria-label='Web page containing interactive map displaying Home Owners Loan Corporation Designations of Neighborhoods in the 1930s in the United States'
+    >
     <Map
         mapboxAccessToken={myKey}
         latitude={viewState.latitude}
@@ -36,6 +43,8 @@ export default function Demo() {
         //updates view of map based on user movement on mousepad
         onMove = {(ev:ViewStateChangeEvent) => setViewState(ev.viewState)}
         onClick={(ev: MapLayerMouseEvent) => console.log(ev)}
+        aria-label='The interactive map with HOLC designations.'
+        aria-roledescription='Use the mouse to drag and zoom around the map'
         style={{width:window.innerWidth,height:window.innerHeight*0.9}}
         mapStyle={'mapbox://styles/mapbox/light-v10'}>
           <Source
