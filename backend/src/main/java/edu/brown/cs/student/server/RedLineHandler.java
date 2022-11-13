@@ -148,7 +148,7 @@ public class RedLineHandler implements Route {
     responses.put("result", responseType);
     responses.put("min_lat", this.min_lat);
     responses.put("min_lon", this.min_lon);
-    responses.put("max_lat", this.min_lat);
+    responses.put("max_lat", this.max_lat);
     responses.put("max_lon", this.min_lon);
 
     // Serializes responses into JSON format
