@@ -32,6 +32,10 @@ BAD REQUESTS: The following conditions result in an error bad request message:
 - larger minimums than maximums
 - parameters that cannot be converted to floats
 
+DEFENSIVE PROGRAMMING: Our defensive programming is primarily visible in the RedLineHandler. In here, we delegate the filtering of the JSON data to a helper function and leave higher level functions in the main handler. By handling all the errors in the handle function, we localize errors to a singular place and prevent corrupted file contents from ever entering the filter method. We also handle a number of improper user input cases such as inputting strings as query parameters by utilizing try catch statements. 
+
+ARIA-LABELS: We utilize aria labels in our Map.tsx file largely in order to mark a main description of the map. 
+
 ## BUGS 
 
 ## TESTS
