@@ -2,11 +2,11 @@ import { FeatureCollection } from "geojson";
 import { FillLayer } from "react-map-gl";
 
 
-// import the raw JSON file
-import rl_data from "../../backend/src/mockData/fullDownload.json"
+// import JSON file
+import rl_data from "./jsonData/fullDownload.json"
 
 
-// type predicate
+// Type predicate
 function isFeatureCollection(json: any): json is FeatureCollection {
     return json.type == "FeatureCollection";
 }
@@ -20,6 +20,7 @@ export function overlayData(): GeoJSON.FeatureCollection | undefined {
 
 const propertyName = 'holc_grade';
 
+//geoLayer dictating colors of redlining data overlayed on the Map
 export const geoLayer: FillLayer = {
     id: 'geo_data',
     type: 'fill',

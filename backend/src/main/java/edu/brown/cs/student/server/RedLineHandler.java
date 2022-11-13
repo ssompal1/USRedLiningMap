@@ -39,7 +39,6 @@ public class RedLineHandler implements Route {
    * @return
    */
   @Override
-  // http://localhost:3232/redline?min_lat=33.464099&max_lat=33.475366&min_lon=-112.093494&max_lon=-112.061602
   public Object handle(Request request, Response response) {
     // Retrieves latitude and longitude from requests
     this.min_lat = request.queryParams("min_lat");
@@ -55,11 +54,11 @@ public class RedLineHandler implements Route {
       return redLineFailureResponse("error_bad_request");
     }
 
+    try{
     Float minLatFloat = Float.parseFloat(this.min_lat);
     Float minLonFloat = Float.parseFloat(this.min_lon);
     Float maxLatFloat = Float.parseFloat(this.max_lat);
     Float maxLonFloat = Float.parseFloat(this.max_lon);
-
 
     //checks condition of invalid latitudes and longitudes
     if(minLatFloat < -90 || minLatFloat > 90 || minLonFloat < -180 || minLonFloat > 180 ||
@@ -71,15 +70,17 @@ public class RedLineHandler implements Route {
     if(minLatFloat > maxLatFloat || minLonFloat > maxLonFloat){
       return redLineFailureResponse("error_bad_request");
     }
-    Path filePath = Path.of("src/mockData/fullDownload.json");
+    Path filePath = Path.of("src/jsonData/fullDownload.json");
     String fileContents = null;
     try {
       fileContents = Files.readString(filePath);
-      System.out.println("successfully read");
     } catch (IOException e) {
       return redLineFailureResponse("error_datasource");
     }
-    return this.redLineSuccessResponse(this.getFilteredData(minLatFloat,maxLatFloat,minLonFloat,maxLonFloat, fileContents));
+    return this.redLineSuccessResponse(this.getFilteredData(minLatFloat,maxLatFloat,minLonFloat,maxLonFloat, fileContents));}
+    catch(NumberFormatException e){
+      return redLineFailureResponse("error_bad_request");
+    }
   }
 
     /**
@@ -90,15 +91,12 @@ public class RedLineHandler implements Route {
     * A call to redLineSuccessResponse is made, passing in the Collection as an argument and returning its result. 
      */
     public FeatureCollection getFilteredData(Float minLatFloat, Float maxLatFloat, Float minLonFloat,Float maxLonFloat, String fileContents){
-
-    System.out.println("made it here");
-
     Moshi moshi = new Moshi.Builder().build();
     FeatureCollection data = null;
     try {
       data = moshi.adapter(FeatureCollection.class).fromJson(fileContents);
-      System.out.println("Successfully converted");
     } catch (IOException e) {
+      return data;
     }
 
     // filters through different regions and add features that meet query parameters of bounded box
@@ -115,12 +113,11 @@ public class RedLineHandler implements Route {
           continue features;
         }
       }
-      System.out.println("adding feature");
       filteredFeatures.add(feature);
     }
-    FeatureCollection collection = new FeatureCollection("FeatureCollection", filteredFeatures);
+    data = new FeatureCollection("FeatureCollection", filteredFeatures);
     // return collection of Features as a success response
-    return collection;
+    return data;
   }
 
   /**
@@ -128,7 +125,6 @@ public class RedLineHandler implements Route {
    * result, the collection, and the values of the passed in query parameters
    */
   public Object redLineSuccessResponse(FeatureCollection filteredData) {
-    System.out.println(filteredData);
     Map<String, Object> responses = new HashMap<>();
     responses.put("result", "success");
     responses.put("data", filteredData);
